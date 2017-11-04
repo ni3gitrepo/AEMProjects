@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>test - Dependencies</comment>
+<entry key="createdBy">HOME</entry>
+<entry key="name">webapi.dependencies</entry>
+<entry key="created">2017-05-15T23:49:04.398-0700</entry>
+<entry key="groupId">com.shop</entry>
+<entry key="version">0.0.1-SNAPSHOT</entry>
+<entry key="requiresRoot">false</entry>
+<entry key="group">com.shop</entry>
+<entry key="description">Dependency Bundle for test</entry>
+<entry key="artifactId">webapi.dependencies</entry>
+<entry key="path">/etc/packages/com.shop/webapi.dependencies.zip</entry>
+</properties>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+      <parent>
+        <groupId>com.shop</groupId>
+		<artifactId>webapi</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+      </parent>
+      <!-- ====================================================================== -->
+      <!-- P R O J E C T D E S C R I P T I O N -->
+      <!-- ====================================================================== -->
+      <artifactId>webapi.dependencies</artifactId>
+      <packaging>content-package</packaging>
+      <name>test - Dependencies</name>
+      <description>Dependency Bundle for test</description>
+      <properties>
+        <dirPath>${project.build.directory}/${project.artifactId}-${project.version}/jcr_root</dirPath>
+      </properties>
+
+
+<!-- project.basedir points to each submodule in this case 
+
+ dependencies for project com.shop:webapi.dependencies:content-package:0.0.1-SNA
+PSHOT: Could not find artifact ojdbc:ojdbc_14g:jar:14 at specified path G:\works
+pace\AEM\webapi\dependencies\lib\ojdbc14_g.jar -> [Help 1]
+
+ -->
+ 
+	 <dependencies>
+	 	 <dependency>
+			     <groupId>ojdbc</groupId>
+   				 <artifactId>ojdbc_14g</artifactId>
+   				 <version>14</version>
+   				 <scope>system</scope>
+   				 <systemPath>${project.basedir}/lib/ojdbc14_g.jar</systemPath>
+		</dependency>  
+		
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>4.2.6.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>4.2.6.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>4.2.6.RELEASE</version>
+		</dependency>
+
+
+		
+
+
+<!-- 
+[INFO] G:\workspace\AEM\webapi\dependencies\target\webapi.dependencies-0.0.1-SN
+PSHOT.jar is not an OSGi Bundle, not uploading
+ -->
+ 
+ 
+ 
+	 </dependencies>	
+
+       <build>
+        <sourceDirectory>src/assembly</sourceDirectory>
+        <resources>
+          <resource>
+            <filtering>false</filtering>
+            <directory>${dirPath}</directory>
+            <excludes>
+              <exclude>**/.vlt</exclude>
+              <exclude>**/.vltignore</exclude>
+            </excludes>
+          </resource>
+        </resources>
+        <plugins>
+          <plugin>
+            <groupId>com.day.jcr.vault</groupId>
+            <artifactId>content-package-maven-plugin</artifactId>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>package</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <appendAssemblyId>false</appendAssemblyId>
+              <descriptors>
+                <descriptor>src/assembly/assembly.xml</descriptor>
+              </descriptors>
+              <finalName>vault-work</finalName>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>resources</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+              <includeEmptyDirs>true</includeEmptyDirs>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <!-- ====================================================================== -->
+      <!-- P R O F I L E S -->
+      <!-- ====================================================================== -->
+      <profiles>
+        <profile>
+          <id>autoInstallPackage</id>
+          <activation></activation>
+          <build>
+            <plugins>
+              <plugin>
+                <groupId>com.day.jcr.vault</groupId>
+                <artifactId>content-package-maven-plugin</artifactId>
+                <executions>
+                  <execution>
+                    <id>install-package</id>
+                    <goals>
+                      <goal>install</goal>
+                    </goals>
+                  </execution>
+                </executions>
+                <configuration>
+                  <targetURL>http://${aem.host}:${aem.port}/crx/packmgr/service.jsp</targetURL>
+                  <failOnError>true</failOnError>
+                  <failOnMissingEmbed>true</failOnMissingEmbed>
+                </configuration>
+              </plugin>
+            </plugins>
+          </build>
+        </profile>
+  </profiles>
+        
+  </project>
