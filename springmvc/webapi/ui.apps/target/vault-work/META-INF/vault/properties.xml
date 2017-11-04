@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>webapi - UI apps</comment>
+<entry key="createdBy">HOME</entry>
+<entry key="name">webapi.ui.apps</entry>
+<entry key="created">2017-05-15T23:48:55.296-0700</entry>
+<entry key="groupId">com.shop</entry>
+<entry key="version">0.0.1-SNAPSHOT</entry>
+<entry key="requiresRoot">false</entry>
+<entry key="group">package</entry>
+<entry key="description">UI apps package for webapi</entry>
+<entry key="artifactId">webapi.ui.apps</entry>
+<entry key="path">/etc/packages/package/webapi.ui.apps.zip</entry>
+</properties>

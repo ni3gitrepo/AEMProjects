@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- | Copyright 2015 Adobe Systems Incorporated | | Licensed under the Apache 
+	License, Version 2.0 (the "License"); | you may not use this file except 
+	in compliance with the License. | You may obtain a copy of the License at 
+	| | http://www.apache.org/licenses/LICENSE-2.0 | | Unless required by applicable 
+	law or agreed to in writing, software | distributed under the License is 
+	distributed on an "AS IS" BASIS, | WITHOUT WARRANTIES OR CONDITIONS OF ANY 
+	KIND, either express or implied. | See the License for the specific language 
+	governing permissions and | limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.shop</groupId>
+	<artifactId>webapi</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<description>webapi</description>
+	<modules>
+		<module>core</module>
+		<module>ui.apps</module>
+		<module>dependencies</module>
+	</modules>
+
+	<properties>
+		<aem.host>localhost</aem.host>
+		<aem.port>4502</aem.port>
+		<aem.publish.host>localhost</aem.publish.host>
+		<aem.publish.port>4503</aem.publish.port>
+		<sling.user>admin</sling.user>
+		<sling.password>admin</sling.password>
+		<vault.user>admin</vault.user>
+		<vault.password>admin</vault.password>
+	</properties>
+
+
+
+	<!-- to check the maven internal variables like project.dir call in cmd 
+		prompt #mvn validate -->
+	<build>
+		<plugins>
+			<!-- Maven Release Plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<scmCommentPrefix>[maven-scm] :</scmCommentPrefix>
+					<preparationGoals>clean install</preparationGoals>
+					<goals>install</goals>
+					<releaseProfiles>release</releaseProfiles>
+				</configuration>
+			</plugin>
+
+
+			<!-- if not specified default to 1.3 [ERROR] G:\workspace\AEM\webapi\core\src\main\java\com\shop\servlet\WebInitializ 
+				er.java:[18,1] error: annotations are not supported in -source 1.3 [ERROR] -->
+			<!-- Maven Compiler Plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+
+
+
+
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<echo>Base Dir:::::::::::${project.basedir}</echo>
+								<echo>base:::::::::::::::${basedir}</echo>
+								<echo>[project.artifactId] ${project.artifactId}</echo>
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+			<!-- Apache Sling Plugin -->
+			<plugin>
+				<groupId>org.apache.sling</groupId>
+				<artifactId>maven-sling-plugin</artifactId>
+				<version>2.1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>install</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<slingUrl>http://${aem.host}:${aem.port}/crx/repository/crx.default</slingUrl>
+					<usePut>true</usePut>
+					<failOnError>true</failOnError>
+				</configuration>
+			</plugin>
+
+			<!-- Apache Felix Bundle Plugin -->
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.5.0</version>
+				<inherited>true</inherited>
+
+				<configuration>
+					<instructions>
+						<Export-Package>org.springframework.*,org.apache,
+						!groovy.*,!com.*,!javax.money,!net.sf,!org.yaml</Export-Package>
+						<!-- <Private-Package>org.foo.myproject.*</Private-Package>
+						<Bundle-Activator>org.foo.myproject.impl1.Activator</Bundle-Activator> -->
+					</instructions>
+				</configuration>
+			</plugin>
+
+			<!-- to be used by ui.apps module -->
+			<plugin>
+				<groupId>com.day.jcr.vault</groupId>
+				<artifactId>content-package-maven-plugin</artifactId>
+				<version>0.0.23</version>
+				<configuration>
+					<targetURL>http://${aem.host}:${aem.port}/crx/packmgr/service.jsp</targetURL>
+					<failOnError>true</failOnError>
+					<failOnMissingEmbed>true</failOnMissingEmbed>
+				</configuration>
+			</plugin>
+
+
+
+
+			<!-- [ERROR] Unknown packaging: bundle @ com.web.api:webapi.core:[unknown-version], 
+				G :\workspace\AEM\webapi\core\pom.xml, line 22, column 13 [WARNING] 'build.plugins.plugin.version' 
+				for org.apache.maven.plugins:maven-comp iler-plugin is missing. @ com.web.api:webapi:0.0.1-SNAPSHOT, 
+				G:\workspace\AEM\we bapi\pom.xml, line 53, column 21 [WARNING] 'build.plugins.plugin.version' 
+				for org.apache.maven.plugins:maven-comp iler-plugin is missing. @ line 53, 
+				column 21 @ -->
+			<!-- Apache Felix SCR Plugin -->
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-scr-plugin</artifactId>
+				<version>1.17.0</version>
+				<executions>
+					<execution>
+						<id>generate-scr-scrdescriptor</id>
+						<goals>
+							<goal>scr</goal>
+						</goals>
+						<configuration>
+							<!-- Private service properties for all services. -->
+							<properties>
+								<service.vendor>Adobe</service.vendor>
+							</properties>
+						</configuration>
+					</execution>
+				</executions>
+				<configuration>
+					<outputDirectory>${project.build.directory}/classes</outputDirectory>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-simple</artifactId>
+						<version>1.5.11</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+
+
+
+
+		</plugins>
+
+
+	</build>
+
+
+
+
+
+	<!-- Maven-content-package is only available in adobe central repository -->
+
+	<profiles>
+		<!-- ====================================================== -->
+		<!-- A D O B E P U B L I C P R O F I L E -->
+		<!-- ====================================================== -->
+		<profile>
+			<id>adobe-public</id>
+
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<properties>
+				<releaseRepository-Id>adobe-public-releases</releaseRepository-Id>
+				<releaseRepository-Name>Adobe Public Releases</releaseRepository-Name>
+				<releaseRepository-URL>http://repo.adobe.com/nexus/content/groups/public</releaseRepository-URL>
+			</properties>
+
+			<repositories>
+				<repository>
+					<id>adobe-public-releases</id>
+					<name>Adobe Public Repository</name>
+					<url>http://repo.adobe.com/nexus/content/groups/public</url>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>never</updatePolicy>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+
+			<pluginRepositories>
+				<pluginRepository>
+					<id>adobe-public-releases</id>
+					<name>Adobe Public Repository</name>
+					<url>http://repo.adobe.com/nexus/content/groups/public</url>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>never</updatePolicy>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+	</profiles>
+
+
+
+
+
+
+	<!-- ====================================================================== -->
+	<!-- D E P E N D E N C I E S -->
+	<!-- ====================================================================== -->
+	<dependencyManagement>
+		<dependencies>
+			<!-- OSGi Dependencies -->
+			<dependency>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>org.apache.felix.scr</artifactId>
+				<version>1.6.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>org.apache.felix.scr.annotations</artifactId>
+				<version>1.9.6</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>biz.aQute</groupId>
+				<artifactId>bndlib</artifactId>
+				<version>1.50.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.core</artifactId>
+				<version>4.2.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.compendium</artifactId>
+				<version>4.2.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- Logging Dependencies -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.5.11</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- Apache Sling Dependencies -->
+			<dependency>
+				<groupId>com.adobe.aem</groupId>
+				<artifactId>aem-api</artifactId>
+				<version>6.0.0.1</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- Apache Commons libraries -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-lang3</artifactId>
+				<version>3.0.1</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>commons-collections</groupId>
+				<artifactId>commons-collections</artifactId>
+				<version>3.2.1</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- Servlet API -->
+
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.1.0</version>
+			</dependency>
+
+			<!-- JCR -->
+			<dependency>
+				<groupId>javax.jcr</groupId>
+				<artifactId>jcr</artifactId>
+				<version>2.0</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- For Sling Models -->
+			<dependency>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+				<version>1</version>
+				<scope>provided</scope>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-web</artifactId>
+				<version>4.2.6.RELEASE</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>4.2.6.RELEASE</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-jdbc</artifactId>
+				<version>4.2.6.RELEASE</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+</project>    
