@@ -1,0 +1,7 @@
+-classpath: c://bundles//plexus-utils-3.1.0.jar
+-output: c://bundles//osgi//plexus-utils-3.1.0.jar
+Export-Package: *;-split-package:=merge-last;-noimport:=true
+Import-Package: *
+Bundle-Version: 3.1.0
+Bundle-Name: Code Haus
+Bundle-SymbolicName: com.org.codehaus
