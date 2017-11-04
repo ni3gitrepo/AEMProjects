@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/apps/test">
+        <exclude pattern="/apps/test/install" />
+        <exclude pattern="/apps/test/i18n/.*" />
+    </filter>
+    <filter root="/apps/sling" />
+    <filter root="/apps/cq/linkchecker"/>
+    <filter root="/apps/cq/xssprotection"/>
+    <filter root="/etc/designs/test">
+        <exclude pattern="/etc/designs/test/jcr:content/productDetail/datalayer"/>
+        <exclude pattern="/etc/designs/test/clientlib/css/*"/>
+    </filter>
+    <filter root="/apps/wcm/extensions/contentfinder"/>
+    <filter root="/etc/languages"/>  
+</workspaceFilter>
+ 
